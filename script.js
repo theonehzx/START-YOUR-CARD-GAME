@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
         { file: "49.jpg", title: "GEDUNG F HAI", date: "Agustus 2025", caption: "akhirnya agit hai! semoga lancar semua (totally not foreshadowing)" },
 
         { file: "46.jpg", title: "hi chief and chiefgirl", date: "Agustus 2025", caption: "sudah selesai masa baktinya, pensi nih." },
-        { file: "47.jpg", title: "CYNDUD ULTAH?!", date: "September 2025", caption: "Our precious moment." },
+        { file: "47.jpg", title: "CYNDUD ULTAH?!", date: "September 2025", caption: "jadi koki wingstop (Walaupun lebih banyak makannya)." },
         { file: "48.jpg", title: "BPHSL on shoot!", date: "November 2025", caption: "sleepyheads cosplay 1 bapak 8 anak." },
 
         { file: "50.jpg", title: "Sosial Humaniora dan BK", date: "November 2025", caption: "life full of essays started." },
