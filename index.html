@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAME START</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+</head>
+
+<body>
+    <audio id="bg-music" loop>
+        <source src="assets/audio.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="card-sfx">
+        <source src="assets/swipe.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="scene" style="padding-top: 100px;">
+        <div class="spotlight"></div>
+
+        <div class="intro-overlay" id="intro-overlay">
+            <h1 class="wiggly-text">Mara's Deck</h1>
+            <p>Whatever shits that happen, let's play our best with what we have been dealt.</p>
+            <button id="start-btn">Deal the Cards</button>
+        </div>
+
+        <div class="deck-container" id="deck-container">
+        </div>
+
+        <div class="nav-container hidden" id="nav-container">
+            <button class="nav-arrow" id="prev-btn">&lsaquo;</button>
+            <button class="nav-arrow" id="next-btn">&rsaquo;</button>
+        </div>
+
+        <div class="envelope-modal hidden" id="envelope-modal">
+            <button id="close-modal-btn" class="close-x">&times;</button>
+            <div class="envelope-wrapper" id="envelope-wrapper">
+                <div class="envelope">
+                    <div class="flap"></div>
+                    <div class="pocket"></div>
+                    <div class="letter">
+                        <div class="letter-text">
+                            <i><br> Who knows where life will take you? <br> </i>
+
+                            <h3><br>Happy Birthday MARABOO!</h3>
+                            <p>Let's see here, a deck worth of 3 years memories.</p>
+                            <p>I hope this deck is full of cards that you remember and love.</p>
+                            <p>Even if the world ends tomorrow, I'm truly thankful that I can live and laugh alongside
+                                you. I wish that you feel the same.</p>
+                            <p> To another year (or years?) of stupid decisions and embarassing moments, cheers! <br>
+                            </p>
+                            <p class="signature"><br>- Truly yours, Z</p>
+                            <img width="100px" src="assets/yours.png">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p class="tap-hint">Tap to Open</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

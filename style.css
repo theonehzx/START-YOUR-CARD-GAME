@@ -1,0 +1,413 @@
+:root {
+    --gold: #d4af37;
+    --card-bg: #fffaf0;
+    --table-darkness: rgba(0, 0, 0, 0.85);
+}
+
+* {
+    box-sizing: border-box;
+    user-select: none;
+}
+
+html,
+body {
+    height: 100dvh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: #000;
+}
+
+/* --- SCENE & LIGHTING --- */
+.scene {
+    position: relative;
+    width: 100vw;
+    height: 100dvh;
+    background-image: url('assets/table.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    /* Stack deck and nav */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Efek Sorotan Lampu */
+.spotlight {
+    position: absolute;
+    inset: 0;
+    /* Adjusted radial gradient to be more subtle at the bottom to avoid "black bar" feel */
+    background: radial-gradient(circle at center, transparent 30%, rgba(0, 0, 0, 0.7) 100%);
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* --- INTRO --- */
+.intro-overlay {
+    position: absolute;
+    inset: 0;
+    /* Cover the whole screen */
+    background: rgba(0, 0, 0, 0.8);
+    /* Overlay hitam transparan */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    text-align: center;
+    color: var(--gold);
+    transition: opacity 0.8s;
+}
+
+.intro-overlay h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 4px 10px rgba(0, 0, 0, 0.8);
+}
+
+#start-btn {
+    padding: 12px 30px;
+    background: transparent;
+    border: 2px solid var(--gold);
+    color: var(--gold);
+    font-size: 1.2rem;
+    cursor: pointer;
+    font-family: 'Playfair Display', serif;
+    margin-top: 20px;
+    transition: 0.3s;
+}
+
+#start-btn:hover {
+    background: var(--gold);
+    color: #000;
+}
+
+.intro-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* --- DECK & CARDS --- */
+.deck-container {
+    position: relative;
+    width: 320px;
+    height: 480px;
+    perspective: 1000px;
+    z-index: 5;
+    margin-top: -50px;
+    /* Lift deck up */
+    margin-bottom: 80px;
+    /* More space to nav */
+}
+
+.card {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: var(--card-bg);
+    border-radius: 15px;
+    padding: 15px;
+    /* Reduced shadow opacity because there are many cards */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    /* Border putih tebal ala kartu */
+    border: 10px solid #fff;
+    /* removed outline to prevent rendering artifacts */
+
+    /* State Transisi */
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s;
+    transform-origin: bottom center;
+    cursor: grab;
+    backface-visibility: hidden;
+    /* Prevent flickering/lines on some browsers */
+    overflow: hidden;
+    /* Ensure content doesn't bleed */
+}
+
+/* Simbol As Sekop Kecil */
+.card::before {
+    content: '♠';
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.card::after {
+    content: '♠';
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    font-size: 1.5rem;
+    color: #333;
+    transform: rotate(180deg);
+}
+
+.card-content {
+    padding-top: 10px;
+}
+
+.card-content img,
+.card-content video {
+    display: block;
+    /* Prevent baseline gap */
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    background: #000;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+
+}
+
+.card-text {
+    text-align: center;
+    margin-top: 15px;
+    color: #333;
+}
+
+.card-text h3 {
+    font-family: 'Playfair Display', serif;
+    margin: 5px 0;
+    font-size: 1.4rem;
+}
+
+.card-text .date {
+    font-size: 0.8rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.card-text .caption {
+    font-size: 0.95rem;
+    line-height: 1.4;
+    margin-top: 8px;
+}
+
+/* --- STATES KARTU --- */
+/* Kartu yang sudah dilewati (dibuang ke kiri) */
+.card.discarded {
+    transform: translate(-120%, 20%) rotate(-20deg) !important;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Kartu yang belum sampai (ada di tumpukan bawah) */
+.card.stacked {
+    /* Transform dihandle JS untuk efek tumpukan random */
+}
+
+/* --- NAVIGASI ANGKA --- */
+.nav-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 10px 15px 40px 15px;
+    z-index: 20;
+    transition: opacity 0.5s;
+}
+
+.nav-container.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.nav-arrow {
+    background: transparent;
+    border: 2px solid var(--gold);
+    color: var(--gold);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.3s;
+    line-height: 0;
+}
+
+.nav-arrow:hover {
+    background: var(--gold);
+    color: #000;
+}
+
+/* --- SURAT (ENVELOPE) --- */
+.envelope-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 500;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    transition: opacity 0.8s;
+}
+
+.envelope-modal.hidden {
+    opacity: 0;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.close-x {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    background: transparent;
+    border: 2px solid var(--gold);
+    color: var(--gold);
+    font-size: 2.5rem;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 600;
+    transition: 0.3s;
+    line-height: 0;
+    padding-bottom: 5px;
+    /* Visual centering for X */
+}
+
+.close-x:hover {
+    background: var(--gold);
+    color: #000;
+    transform: rotate(90deg);
+}
+
+.envelope-wrapper {
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.5s;
+}
+
+.envelope-wrapper:hover {
+    transform: scale(1.02);
+}
+
+.envelope {
+    width: 320px;
+    height: 220px;
+    background: #f0e6d2;
+    position: relative;
+    border-radius: 4px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+    /* CRITICAL: Hide letter when closed */
+}
+
+.flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 160px solid transparent;
+    border-right: 160px solid transparent;
+    border-top: 120px solid #e6dcc5;
+    /* Solid */
+    transform-origin: top;
+    transition: 0.6s;
+    z-index: 5;
+}
+
+.pocket {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 160px solid #e0d0b0;
+    border-right: 160px solid #dcb;
+    border-bottom: 110px solid #d4c5a5;
+    z-index: 4;
+}
+
+.letter {
+    position: absolute;
+    top: 20px;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+    background: #fff;
+    padding: 25px;
+    transition: all 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 2;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+
+    /* Initially hidden and shifted down */
+    opacity: 0 !important;
+    transform: translateY(120px);
+    pointer-events: none;
+}
+
+/* Animasi Buka Surat */
+.envelope-wrapper.open .flap {
+    transform: rotateX(180deg);
+    z-index: 1;
+}
+
+.envelope-wrapper.open .envelope {
+    overflow: visible;
+    /* CRITICAL: Show letter when open */
+}
+
+.envelope-wrapper.open .letter {
+    opacity: 1 !important;
+    transform: translateY(-160px);
+    /* Slid way up */
+    pointer-events: auto;
+    z-index: 6;
+    height: 380px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+    align-items: flex-start;
+    overflow-y: auto;
+}
+
+.tap-hint {
+    color: var(--gold);
+    margin-top: 100px;
+    font-family: 'Playfair Display';
+    font-size: 1.2rem;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.4;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.4;
+    }
+}
+
+/* Replay button removed from HTML but class kept for other potential uses or just clean up */
+.replay-btn {
+    display: none;
+}
